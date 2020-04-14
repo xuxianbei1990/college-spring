@@ -74,7 +74,7 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory {
         return getBean(beanClass.getName());
     }
 
-    private Object getBean(String beanName) throws Exception {
+    public Object getBean(String beanName) throws Exception {
         MyBeanDefinition gpBeanDefinition = this.beanDefinitionMap.get(beanName);
         Object instance = null;
         //这里和源码出入较大
@@ -155,5 +155,9 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory {
             beanDefinitionMap.put(myBeanDefinition.getFactoryBeanName(), myBeanDefinition);
         });
 
+    }
+
+    public String[] getBeanDefinitionNames() {
+        return this.beanDefinitionMap.keySet().toArray(new  String[this.beanDefinitionMap.size()]);
     }
 }
