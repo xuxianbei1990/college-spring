@@ -3,6 +3,11 @@ package college.simple.spring.formework.context;
 import college.simple.spring.formework.annotation.MyAutowired;
 import college.simple.spring.formework.annotation.MyController;
 import college.simple.spring.formework.annotation.MyService;
+import college.simple.spring.formework.aop.MyAopProxy;
+import college.simple.spring.formework.aop.MyCglibAopProxy;
+import college.simple.spring.formework.aop.MyJdkDynamicAopProxy;
+import college.simple.spring.formework.aop.config.MyAopConfig;
+import college.simple.spring.formework.aop.support.MyAdvisedSupport;
 import college.simple.spring.formework.beans.MyBeanWrapper;
 import college.simple.spring.formework.beans.config.MyBeanDefinition;
 import college.simple.spring.formework.beans.config.MyBeanPostProcessor;
@@ -54,6 +59,12 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory {
 
         //4、把不是延时加载的类，有提前初始化
         doAutowrited();
+
+        onRefresh();
+    }
+
+    protected void onRefresh() {
+
     }
 
     private void doAutowrited() {
@@ -137,6 +148,14 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory {
             } else {
                 Class<?> clazz = Class.forName(beanName);
                 instance = clazz.newInstance();
+
+                MyAdvisedSupport support = instantionAopConfig(myBeanDefinition);
+                support.setTargetClass(clazz);
+                support.setTarget(instance);
+                if(support.pointCutMatch()) {
+                    instance = createProxy(support).getProxy();
+                }
+
                 factoryBeanObjectCache.putIfAbsent(className, instance);
                 factoryBeanObjectCache.putIfAbsent(myBeanDefinition.getFactoryBeanName(), instance);
             }
@@ -147,12 +166,32 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory {
         return null;
     }
 
+    private MyAopProxy createProxy(MyAdvisedSupport config) {
+
+        Class targetClass = config.getTargetClass();
+        if(targetClass.getInterfaces().length > 0){
+            return new MyJdkDynamicAopProxy(config);
+        }
+        return new MyCglibAopProxy(config);
+    }
+
+    private MyAdvisedSupport instantionAopConfig(MyBeanDefinition myBeanDefinition) {
+        MyAopConfig config = new MyAopConfig();
+        config.setPointCut(this.reader.getConfig().getProperty("pointCut"));
+        config.setAspectClass(this.reader.getConfig().getProperty("aspectClass"));
+        config.setAspectBefore(this.reader.getConfig().getProperty("aspectBefore"));
+        config.setAspectAfter(this.reader.getConfig().getProperty("aspectAfter"));
+        config.setAspectAfterThrow(this.reader.getConfig().getProperty("aspectAfterThrow"));
+        config.setAspectAfterThrowingName(this.reader.getConfig().getProperty("aspectAfterThrowingName"));
+        return new MyAdvisedSupport(config);
+    }
+
     private void doRegisterBeanDefinition(List<MyBeanDefinition> beanDefinitions) {
         beanDefinitions.forEach(myBeanDefinition -> {
             if (beanDefinitionMap.containsKey(myBeanDefinition.getFactoryBeanName())) {
-                throw new RuntimeException("The “" + myBeanDefinition.getFactoryBeanName() + "” is exists!!");
+//                throw new RuntimeException("The “" + myBeanDefinition.getFactoryBeanName() + "” is exists!!");
             }
-            beanDefinitionMap.put(myBeanDefinition.getFactoryBeanName(), myBeanDefinition);
+            beanDefinitionMap.putIfAbsent(myBeanDefinition.getFactoryBeanName(), myBeanDefinition);
         });
 
     }

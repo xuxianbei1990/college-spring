@@ -1,4 +1,4 @@
-package college.simple.spring.formework.webmvc.servlet;
+package college.simple.spring.formework.web.servlet;
 
 import lombok.Data;
 

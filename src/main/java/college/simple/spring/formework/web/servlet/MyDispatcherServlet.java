@@ -1,4 +1,4 @@
-package college.simple.spring.formework.webmvc.servlet;
+package college.simple.spring.formework.web.servlet;
 
 import college.simple.spring.formework.annotation.MyController;
 import college.simple.spring.formework.annotation.MyRequestMapping;

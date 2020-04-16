@@ -1,4 +1,4 @@
-package college.simple.spring.formework.webmvc.servlet;
+package college.simple.spring.formework.web.servlet;
 
 import college.simple.spring.formework.annotation.MyRequestParam;
 import org.springframework.util.StringUtils;
