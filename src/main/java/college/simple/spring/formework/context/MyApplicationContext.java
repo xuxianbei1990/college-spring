@@ -147,12 +147,20 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory {
                 instance = factoryBeanObjectCache.get(className);
             } else {
                 Class<?> clazz = Class.forName(beanName);
+
+                /**spring不是这么做的 是通过构造方法实现的
+                 * Class clazz = MyReentrantLock.class;
+                 *             Constructor[] constructors = clazz.getConstructors();
+                 *             Constructor myReentrantLock = MyReentrantLock.class.getConstructor(constructors[0].getParameterTypes()[0]);
+                 *             System.out.println(myReentrantLock.newInstance("tt"));
+                 */
+                //spring不是这么做的 是通过上面的构造方法实现的
                 instance = clazz.newInstance();
 
                 MyAdvisedSupport support = instantionAopConfig(myBeanDefinition);
                 support.setTargetClass(clazz);
                 support.setTarget(instance);
-                if(support.pointCutMatch()) {
+                if (support.pointCutMatch()) {
                     instance = createProxy(support).getProxy();
                 }
 
@@ -169,7 +177,7 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory {
     private MyAopProxy createProxy(MyAdvisedSupport config) {
 
         Class targetClass = config.getTargetClass();
-        if(targetClass.getInterfaces().length > 0){
+        if (targetClass.getInterfaces().length > 0) {
             return new MyJdkDynamicAopProxy(config);
         }
         return new MyCglibAopProxy(config);
@@ -197,6 +205,6 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory {
     }
 
     public String[] getBeanDefinitionNames() {
-        return this.beanDefinitionMap.keySet().toArray(new  String[this.beanDefinitionMap.size()]);
+        return this.beanDefinitionMap.keySet().toArray(new String[this.beanDefinitionMap.size()]);
     }
 }
