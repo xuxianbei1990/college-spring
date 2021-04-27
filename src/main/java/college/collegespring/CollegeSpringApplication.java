@@ -1,11 +1,11 @@
 package college.collegespring;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import college.boot.SpringApplication;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SpringBootApplication
+
 public class CollegeSpringApplication {
 
     private static AtomicInteger nextHashCode =
@@ -19,8 +19,7 @@ public class CollegeSpringApplication {
         return nextHashCode.getAndAdd(HASH_INCREMENT);
     }
 
-	public static void main(String[] args) {
-		SpringApplication.run(CollegeSpringApplication.class, args);
-
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CollegeSpringApplication.class, args);
+    }
 }

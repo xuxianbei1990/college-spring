@@ -3,7 +3,7 @@ package college.simple.spring.formework.web.servlet.context;
 import college.simple.spring.formework.context.MyApplicationContext;
 import college.simple.spring.formework.web.embedded.tomcat.MyTomcatServletWebServerFactory;
 import college.simple.spring.formework.web.server.MyWebServer;
-import org.springframework.context.ApplicationContextException;
+
 
 /**
  * @author: xuxianbei
@@ -25,7 +25,7 @@ public class MyServletWebServerApplicationContext extends MyApplicationContext {
         try {
             createWebServer();
         } catch (Throwable ex) {
-            throw new ApplicationContextException("Unable to start web server", ex);
+            throw new RuntimeException("Unable to start web server", ex);
         }
     }
 

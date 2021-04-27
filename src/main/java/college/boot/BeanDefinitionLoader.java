@@ -1,6 +1,7 @@
 package college.boot;
 
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+
+import college.context.support.BeanDefinitionRegistry;
 
 /**
  * @author: xuxianbei

@@ -1,19 +1,17 @@
 package college.boot;
 
-import college.context.AnnotationConfigServletWebServerApplicationContext;
+import college.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import college.context.ApplicationContext;
 import college.context.ConfigurableApplicationContext;
+import college.context.support.AbstractApplicationContext;
+import college.context.support.BeanDefinitionRegistry;
 import college.context.support.StandardServletEnvironment;
 import college.core.ResourceLoader;
 import college.core.env.ConfigurableEnvironment;
+import college.core.io.support.SpringFactoriesLoader;
+import college.utils.Assert;
 import college.utils.StopWatch;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.boot.Banner;
-import org.springframework.boot.SpringBootExceptionReporter;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.io.support.SpringFactoriesLoader;
-import org.springframework.util.Assert;
+
 
 import java.util.*;
 
@@ -42,6 +40,7 @@ public class SpringApplication {
     }
 
     public static ConfigurableApplicationContext run(Class<?>[] primarySources, String[] args) {
+        //这里是把主类保存了下
         return new SpringApplication(primarySources).run(args);
     }
 
